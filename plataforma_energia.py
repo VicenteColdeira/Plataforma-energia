@@ -43,7 +43,7 @@ if submit:
     st.subheader("📄 Informe Inteligente")
     with st.spinner("Generando informe personalizado con IA..."):
         respuesta = openai.ChatCompletion.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "Eres un asesor energético experto. Tu tarea es explicar recomendaciones de ahorro energético de forma clara y simple para clientes en Chile."},
                 {"role": "user", "content": f"Cliente tipo: {tipo_cliente}. Región: {region}. Consumo mensual: {consumo_mensual_kwh} kWh. Costo mensual: {costo_mensual} CLP. Ahorro estimado por eficiencia energética: {ahorro_ee:.0f} kWh. Ahorro por solar: {ahorro_solar:.0f} kWh. Potencia solar recomendada: {potencia_recomendada_kwp} kWp."}
