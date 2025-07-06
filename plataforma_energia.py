@@ -42,19 +42,22 @@ if submit:
     # === Informe generado por IA ===
     st.subheader("📄 Informe Inteligente")
     with st.spinner("Generando informe personalizado con IA..."):
-        respuesta = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": "Eres un asesor energético experto. Tu tarea es explicar recomendaciones de ahorro energético de forma clara y simple para clientes en Chile."},
-                {"role": "user", "content": f"Cliente tipo: {tipo_cliente}. Región: {region}. Consumo mensual: {consumo_mensual_kwh} kWh. Costo mensual: {costo_mensual} CLP. Ahorro estimado por eficiencia energética: {ahorro_ee:.0f} kWh. Ahorro por solar: {ahorro_solar:.0f} kWh. Potencia solar recomendada: {potencia_recomendada_kwp} kWp."}
-            ]
-        )
-        informe_ia = respuesta["choices"][0]["message"]["content"]
-        st.success("Informe generado con éxito")
-        st.text_area("Informe generado por IA", informe_ia, height=300)
-        st.download_button(
-            label="Descargar informe IA (.txt)",
-            data=informe_ia,
-            file_name="informe_energetico_IA.txt",
-            mime="text/plain"
-        )
+        try:
+            respuesta = openai.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": "Eres un asesor energético experto. Tu tarea es explicar recomendaciones de ahorro energético de forma clara y simple para clientes en Chile."},
+                    {"role": "user", "content": f"Cliente tipo: {tipo_cliente}. Región: {region}. Consumo mensual: {consumo_mensual_kwh} kWh. Costo mensual: {costo_mensual} CLP. Ahorro estimado por eficiencia energética: {ahorro_ee:.0f} kWh. Ahorro por solar: {ahorro_solar:.0f} kWh. Potencia solar recomendada: {potencia_recomendada_kwp} kWp."}
+                ]
+            )
+            informe_ia = respuesta.choices[0].message.content
+            st.success("Informe generado con éxito")
+            st.text_area("Informe generado por IA", informe_ia, height=300)
+            st.download_button(
+                label="Descargar informe IA (.txt)",
+                data=informe_ia,
+                file_name="informe_energetico_IA.txt",
+                mime="text/plain"
+            )
+        except Exception as e:
+            st.error(f"Ocurrió un error al generar el informe: {e}")
